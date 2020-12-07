@@ -232,6 +232,13 @@ static NSDictionary* customCertificatesForHost;
     WKWebpagePreferences *pagePrefs = [[WKWebpagePreferences alloc]init];
     pagePrefs.preferredContentMode = _contentMode;
     wkWebViewConfig.defaultWebpagePreferences = pagePrefs;
+
+    NSString *contentBlock = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blockerList" ofType:@"json"] encoding:NSUTF8StringEncoding error:nil];
+    if (contentBlock) {
+      [[WKContentRuleListStore defaultStore] compileContentRuleListForIdentifier:@"defaultRules" encodedContentRuleList:contentBlock completionHandler:^(WKContentRuleList *ruleList, NSError *err) {
+          [[wkWebViewConfig userContentController] addContentRuleList:ruleList];
+      }];
+    }
   }
 #endif
 
@@ -282,7 +289,7 @@ static NSDictionary* customCertificatesForHost;
     _webView.scrollView.scrollEnabled = _scrollEnabled;
     _webView.scrollView.pagingEnabled = _pagingEnabled;
       //For UIRefreshControl to work correctly, the bounces should always be true
-    _webView.scrollView.bounces = _pullToRefreshEnabled || _bounces; 
+    _webView.scrollView.bounces = _pullToRefreshEnabled || _bounces;
     _webView.scrollView.showsHorizontalScrollIndicator = _showsHorizontalScrollIndicator;
     _webView.scrollView.showsVerticalScrollIndicator = _showsVerticalScrollIndicator;
     _webView.scrollView.directionalLockEnabled = _directionalLockEnabled;
@@ -1155,7 +1162,7 @@ static NSDictionary* customCertificatesForHost;
 - (void)setPullToRefreshEnabled:(BOOL)pullToRefreshEnabled
 {
     _pullToRefreshEnabled = pullToRefreshEnabled;
-    
+
     if (pullToRefreshEnabled) {
         [self addPullToRefreshControl];
     } else {

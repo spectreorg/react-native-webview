@@ -233,12 +233,14 @@ static NSDictionary* customCertificatesForHost;
     pagePrefs.preferredContentMode = _contentMode;
     wkWebViewConfig.defaultWebpagePreferences = pagePrefs;
 
+    /* Disable for now
     NSString *contentBlock = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"blockerList" ofType:@"json"] encoding:NSUTF8StringEncoding error:nil];
     if (contentBlock) {
       [[WKContentRuleListStore defaultStore] compileContentRuleListForIdentifier:@"defaultRules" encodedContentRuleList:contentBlock completionHandler:^(WKContentRuleList *ruleList, NSError *err) {
           [[wkWebViewConfig userContentController] addContentRuleList:ruleList];
       }];
     }
+    */
   }
 #endif
 
